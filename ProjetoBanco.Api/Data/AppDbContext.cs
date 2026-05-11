@@ -44,7 +44,7 @@ public class AppDbContext : DbContext
             .HasOne(c => c.Produto)
             .WithMany(p => p.Contratacoes)
             .HasForeignKey(c => c.ProdutoId);
-        
+
         modelBuilder.Entity<Contratacao>()
             .Property(c => c.Observacao)
             .IsRequired(false)

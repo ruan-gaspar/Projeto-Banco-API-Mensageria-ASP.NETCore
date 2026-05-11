@@ -53,7 +53,7 @@ public class ContratacoesController : ControllerBase
         _db.Contratacoes.Add(contratacao);
         await _db.SaveChangesAsync();
 
-        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id,ObterTipoProduto(produto)));
+        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id, ObterTipoProduto(produto)));
         _rabbit.Publicar("contratacao-solicitada", payload);
 
         _logger.LogInformation("Contratação {Id} publicada na fila", contratacao.Id);
