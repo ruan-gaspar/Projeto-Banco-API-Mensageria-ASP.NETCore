@@ -6,10 +6,10 @@
 
 ## 1. Identificação
 
-| Nome | RM |
-|------|----|
-| _(Integrante 1 — preencha seu nome)_ | _(RM)_ |
-| _(Integrante 2 — preencha seu nome)_ | _(RM)_ |
+| Nome                                    | RM           |
+|-----------------------------------------|--------------|
+| _(Integrante 1 — Ruan Nunes Gaspar)_    | _(RM559567)_ |
+| _(Integrante 2 — Rodrigo Paes Morales)_ | _(RM560209)_ |
 
 ---
 
@@ -80,12 +80,17 @@ Aguarde ~10 segundos e acesse o painel de gerenciamento:
 
 Edite `ProjetoBanco.Api/appsettings.json`:
 
-```json
-{
-  "ConnectionStrings": {
-    "Oracle": "User Id=RM_SEUNUMERO;Password=SUASENHA;Data Source=oracle.fiap.com.br:1521/ORCL;"
-  }
-}
+```
+ORACLE_USER=RM_SEUNUMERO
+ORACLE_PASSWORD=SUA_SENHA
+ORACLE_HOST=oracle.fiap.com.br
+ORACLE_PORT=1521
+ORACLE_SERVICE=ORCL
+
+RABBITMQ_HOST=localhost
+RABBITMQ_PORT=5672
+RABBITMQ_USER=guest
+RABBITMQ_PASSWORD=guest
 ```
 
 ### 3. Aplicar as Migrations
