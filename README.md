@@ -38,7 +38,7 @@ Contratações com score total ≥ 60 são **APROVADAS**; abaixo disso, **RECUSA
 | Complexidade de infraestrutura | Baixa — 1 fila para declarar | Alta — 1 fila por produto |
 | Escalabilidade independente | Não (consumers disputam a fila) | Sim (cada fila tem seu consumer) |
 | Simplicidade do Consumer | Necessita `switch` no payload | Consumer dedicado por produto |
-| Adequação ao escopo | ✅ Projeto com 1 produto ativo | Melhor para 3+ produtos em produção |
+| Adequação ao escopo | Projeto com 1 produto ativo | Melhor para 3+ produtos em produção |
 
 Para um projeto individual/dupla com apenas 1 produto implementado na API, a fila única reduz overhead de infraestrutura sem perda funcional. O campo `TipoProduto` no payload permite extensão futura sem alteração de infraestrutura.
 
