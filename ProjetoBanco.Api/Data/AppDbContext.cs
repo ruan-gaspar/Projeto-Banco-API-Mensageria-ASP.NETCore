@@ -17,13 +17,11 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Herança de Cliente — tabela única (TPH)
         modelBuilder.Entity<Cliente>()
             .HasDiscriminator<string>("Tipo")
             .HasValue<PessoaFisica>("PF")
             .HasValue<PessoaJuridica>("PJ");
 
-        // Herança de Produto — tabela única (TPH)
         modelBuilder.Entity<Produto>()
             .HasDiscriminator<string>("Tipo")
             .HasValue<Emprestimo>("EMPRESTIMO")
@@ -44,8 +42,16 @@ public class AppDbContext : DbContext
             .HasOne(c => c.Produto)
             .WithMany(p => p.Contratacoes)
             .HasForeignKey(c => c.ProdutoId);
+        
+        modelBuilder.Entity<Contratacao>()
+            .Property(c => c.Observacao)
+            .IsRequired(false)
+            .HasDefaultValue("");
 
-        // Nomes de tabela explícitos para Oracle
+        modelBuilder.Entity<Contratacao>()
+            .Property(c => c.DataProcessamento)
+            .IsRequired(false);
+
         modelBuilder.Entity<Cliente>().ToTable("TB_CLIENTES");
         modelBuilder.Entity<Agencia>().ToTable("TB_AGENCIAS");
         modelBuilder.Entity<Produto>().ToTable("TB_PRODUTOS");

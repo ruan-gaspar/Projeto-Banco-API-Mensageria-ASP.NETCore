@@ -97,7 +97,10 @@ public class ContratacaoConsumer : BackgroundService
 
                 await db.SaveChangesAsync(stoppingToken);
                 _logger.LogInformation("Contratação {Id} processada: {Status}", contratacao.Id, contratacao.Status);
-
+                
+                //apenas para teste com RabbitMQ 
+                //await Task.Delay(30000, stoppingToken);
+                
                 _channel!.BasicAck(ea.DeliveryTag, false); // ACK manual após sucesso
             }
             catch (Exception ex)

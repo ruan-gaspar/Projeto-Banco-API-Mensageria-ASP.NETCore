@@ -304,38 +304,24 @@ dotnet test --verbosity normal
 
 > Todos os testes usam `WebApplicationFactory<Program>` com Oracle substituído por banco InMemory e RabbitMQ mockado via Moq.
 
-**Print do resultado:**
-_(cole aqui o print do terminal com `dotnet test` após rodar)_
-
+**Terminal de Testes:**
+![Demo](./readme-image-gif/demo-01.gif)
 ---
 
 ## 8. Painel do RabbitMQ
 
 Acesse **http://localhost:15672** → aba **Queues** → fila `contratacao-solicitada`.
 
-**Print do painel com mensagens processadas:**
-_(cole aqui o print mostrando a fila com `Ready: 0` e `Total: N` após processar contratações)_
-
-Para demonstrar o comportamento de **Unacked** (requisito do enunciado):
-1. Adicione um `Thread.Sleep(30000)` temporário no `ContratacaoConsumer` antes do `BasicAck`
-2. Envie uma contratação via POST
-3. Tire o print do painel mostrando `Unacked: 1`
-4. Remova o `Thread.Sleep`
+**Painel com mensagens processadas:**
+![Demo](./readme-image-gif/demo-02.gif)
 
 ---
 
 ## 9. Swagger com Contratação Aprovada
 
-Acesse **http://localhost:5000/swagger**:
 
-1. Execute `POST /api/agencias` para criar uma agência
-2. Execute `POST /api/clientes/pf` para criar um cliente
-3. Crie um produto diretamente no banco (via migrations seed ou SQL)
-4. Execute `POST /api/contratacoes` com `clienteId` e `produtoId`
-5. Aguarde ~2s e execute `GET /api/contratacoes/{id}` — status deverá ser `APROVADA`
-
-**Print do Swagger com contratação aprovada:**
-_(cole aqui o print da tela do Swagger mostrando a resposta do GET com `"status": "APROVADA"`)_
+**Swagger com contratação aprovada:**
+![Demo](./readme-image-gif/demo-03.gif)
 
 ---
 
