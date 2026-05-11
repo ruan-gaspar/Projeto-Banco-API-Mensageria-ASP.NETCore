@@ -14,16 +14,16 @@ public class AppDbContext : DbContext
     public DbSet<Produto> Produtos => Set<Produto>();
     public DbSet<Emprestimo> Emprestimos => Set<Emprestimo>();
     public DbSet<Contratacao> Contratacoes => Set<Contratacao>();
+    public DbSet<MaquinaDeCartao> MaquinasDeCartao => Set<MaquinaDeCartao>();
+    public DbSet<ReceberSalario> ReceberSalario => Set<ReceberSalario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Herança de Cliente — tabela única (TPH)
         modelBuilder.Entity<Cliente>()
             .HasDiscriminator<string>("Tipo")
             .HasValue<PessoaFisica>("PF")
             .HasValue<PessoaJuridica>("PJ");
 
-        // Herança de Produto — tabela única (TPH)
         modelBuilder.Entity<Produto>()
             .HasDiscriminator<string>("Tipo")
             .HasValue<Emprestimo>("EMPRESTIMO")
@@ -45,7 +45,15 @@ public class AppDbContext : DbContext
             .WithMany(p => p.Contratacoes)
             .HasForeignKey(c => c.ProdutoId);
 
-        // Nomes de tabela explícitos para Oracle
+        modelBuilder.Entity<Contratacao>()
+            .Property(c => c.Observacao)
+            .IsRequired(false)
+            .HasDefaultValue("");
+
+        modelBuilder.Entity<Contratacao>()
+            .Property(c => c.DataProcessamento)
+            .IsRequired(false);
+
         modelBuilder.Entity<Cliente>().ToTable("TB_CLIENTES");
         modelBuilder.Entity<Agencia>().ToTable("TB_AGENCIAS");
         modelBuilder.Entity<Produto>().ToTable("TB_PRODUTOS");

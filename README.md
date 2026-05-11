@@ -78,7 +78,7 @@ Aguarde ~10 segundos e acesse o painel de gerenciamento:
 
 ### 2. Configurar a connection string Oracle
 
-Edite `ProjetoBanco.Api/appsettings.json`:
+Crie um arquivo `.env` e copie o conteúdo de `.env.example`. Altere seu user e senha do banco Oracle:
 
 ```
 ORACLE_USER=RM_SEUNUMERO
@@ -119,23 +119,37 @@ A API estará disponível em:
 **Request:**
 ```json
 {
-  "nome": "João Silva",
-  "email": "joao@email.com",
-  "telefone": "11999990000",
-  "agenciaId": 1,
-  "cpf": "12345678901",
-  "dataNascimento": "1990-01-15T00:00:00"
+  "nome": "Carlos Eduardo",
+  "email": "carlos.eduardo@email.com",
+  "telefone": "11977776666",
+  "agenciaId": 2,
+  "cpf": "32165498700",
+  "dataNascimento": "1992-03-10T00:00:00"
 }
+```
+
+**cURL:**
+```bash
+curl -X POST "http://localhost:5067/api/clientes/pf" \
+-H "Content-Type: application/json" \
+-d '{
+  "nome": "Carlos Eduardo",
+  "email": "carlos.eduardo@email.com",
+  "telefone": "11977776666",
+  "agenciaId": 2,
+  "cpf": "32165498700",
+  "dataNascimento": "1992-03-10T00:00:00"
+}'
 ```
 
 **Response 201:**
 ```json
 {
-  "id": 1,
-  "nome": "João Silva",
-  "email": "joao@email.com",
-  "cpf": "12345678901",
-  "agenciaId": 1
+  "id": 7,
+  "nome": "Carlos Eduardo",
+  "email": "carlos.eduardo@email.com",
+  "cpf": "32165498700",
+  "agenciaId": 2
 }
 ```
 
@@ -146,23 +160,37 @@ A API estará disponível em:
 **Request:**
 ```json
 {
-  "nome": "Empresa X",
-  "email": "contato@empresax.com",
-  "telefone": "1133334444",
-  "agenciaId": 1,
-  "cnpj": "12345678000199",
-  "razaoSocial": "Empresa X Ltda"
+  "nome": "NovaTech",
+  "email": "contato@novatech.com.br",
+  "telefone": "1144556677",
+  "agenciaId": 3,
+  "cnpj": "99887766000144",
+  "razaoSocial": "NovaTech Soluções Digitais LTDA"
 }
+```
+
+**cURL:**
+```bash
+curl -X POST "http://localhost:5067/api/clientes/pj" \
+-H "Content-Type: application/json" \
+-d '{
+  "nome": "NovaTech",
+  "email": "contato@novatech.com.br",
+  "telefone": "1144556677",
+  "agenciaId": 3,
+  "cnpj": "99887766000144",
+  "razaoSocial": "NovaTech Soluções Digitais LTDA"
+}'
 ```
 
 **Response 201:**
 ```json
 {
-  "id": 2,
-  "nome": "Empresa X",
-  "cnpj": "12345678000199",
-  "razaoSocial": "Empresa X Ltda",
-  "agenciaId": 1
+  "id": 8,
+  "nome": "NovaTech",
+  "cnpj": "99887766000144",
+  "razaoSocial": "NovaTech Soluções Digitais LTDA",
+  "agenciaId": 3
 }
 ```
 
@@ -170,16 +198,22 @@ A API estará disponível em:
 
 ### GET `/api/clientes/{id}` — Busca Cliente por ID
 
+**cURL:**
+```bash
+curl -X GET "http://localhost:5067/api/clientes/7"
+```
+
 **Response 200:**
 ```json
 {
-  "id": 1,
-  "nome": "João Silva",
-  "email": "joao@email.com",
+  "id": 7,
+  "nome": "Carlos Eduardo",
+  "email": "carlos.eduardo@email.com",
+  "telefone": "11977776666",
   "agencia": {
-    "id": 1,
-    "nome": "Agência Central",
-    "numero": "001"
+    "id": 2,
+    "nome": "Agência Paulista",
+    "numero": "102"
   }
 }
 ```
@@ -191,19 +225,30 @@ A API estará disponível em:
 **Request:**
 ```json
 {
-  "nome": "Agência Central",
-  "numero": "001",
-  "endereco": "Av. Paulista, 1000 — São Paulo/SP"
+  "nome": "Agência Paulista",
+  "numero": "102",
+  "endereco": "Av. Brigadeiro Faria Lima, 500 — São Paulo/SP"
 }
+```
+
+**cURL:**
+```bash
+curl -X POST "http://localhost:5067/api/agencias" \
+-H "Content-Type: application/json" \
+-d '{
+  "nome": "Agência Paulista",
+  "numero": "102",
+  "endereco": "Av. Brigadeiro Faria Lima, 500 — São Paulo/SP"
+}'
 ```
 
 **Response 201:**
 ```json
 {
-  "id": 1,
-  "nome": "Agência Central",
-  "numero": "001",
-  "endereco": "Av. Paulista, 1000 — São Paulo/SP"
+  "id": 2,
+  "nome": "Agência Paulista",
+  "numero": "102",
+  "endereco": "Av. Brigadeiro Faria Lima, 500 — São Paulo/SP"
 }
 ```
 
@@ -211,13 +256,58 @@ A API estará disponível em:
 
 ### GET `/api/agencias/{id}` — Busca Agência por ID
 
+**cURL:**
+```bash
+curl -X GET "http://localhost:5067/api/agencias/2"
+```
+
 **Response 200:**
 ```json
 {
+  "id": 2,
+  "nome": "Agência Paulista",
+  "numero": "102",
+  "endereco": "Av. Brigadeiro Faria Lima, 500 — São Paulo/SP"
+}
+```
+
+---
+
+### POST `/api/emprestimos` — Cadastra Produto de Empréstimo
+
+**Request:**
+```json
+{
+  "nome": "Empréstimo Universitário",
+  "descricao": "Linha de crédito para graduação e pós-graduação",
+  "valorSolicitado": 45000,
+  "taxaJuros": 1.9,
+  "prazoDias": 540
+}
+```
+
+**cURL:**
+```bash
+curl -X POST "http://localhost:5067/api/emprestimos" \
+-H "Content-Type: application/json" \
+-d '{
+  "nome": "Empréstimo Universitário",
+  "descricao": "Linha de crédito para graduação e pós-graduação",
+  "valorSolicitado": 45000,
+  "taxaJuros": 1.9,
+  "prazoDias": 540
+}'
+```
+
+**Response 201:**
+```json
+{
   "id": 1,
-  "nome": "Agência Central",
-  "numero": "001",
-  "endereco": "Av. Paulista, 1000 — São Paulo/SP"
+  "nome": "Empréstimo Universitário",
+  "descricao": "Linha de crédito para graduação e pós-graduação",
+  "valorSolicitado": 45000,
+  "taxaJuros": 1.9,
+  "prazoDias": 540
 }
 ```
 
@@ -228,38 +318,64 @@ A API estará disponível em:
 **Request:**
 ```json
 {
-  "clienteId": 1,
+  "clienteId": 7,
   "produtoId": 1
 }
+```
+
+**cURL:**
+```bash
+curl -X POST "http://localhost:5067/api/contratacoes" \
+-H "Content-Type: application/json" \
+-d '{
+  "clienteId": 7,
+  "produtoId": 1
+}'
 ```
 
 **Response 202:**
 ```json
 {
-  "id": 3,
+  "id": 12,
   "status": "PENDENTE"
 }
 ```
-
-> A contratação é persistida com status `PENDENTE` e uma mensagem é publicada na fila `contratacao-solicitada`. O processamento ocorre de forma **assíncrona** pelo `ContratacaoConsumer`.
 
 ---
 
 ### GET `/api/contratacoes/{id}` — Consulta Status da Contratação
 
+**cURL:**
+```bash
+curl -X GET "http://localhost:5067/api/contratacoes/12"
+```
+
 **Response 200 (após processamento):**
+
 ```json
+
 {
-  "id": 3,
+  "id": 12,
+  "clienteId": 7,
+  "produtoId": 1,
   "status": "APROVADA",
-  "observacao": "Empréstimo aprovado. Score: 80/100.",
-  "dataSolicitacao": "2026-05-11T12:00:00Z",
-  "dataProcessamento": "2026-05-11T12:00:02Z",
+  "dataSolicitacao": "2026-05-11T19:35:00Z",
+  "dataProcessamento": "2026-05-11T19:35:02Z",
+  "observacao": "Solicitação aprovada após análise automática.",
+  "cliente": {
+    "id": 3,
+    "nome": "John Shepherd",
+    "email": "js@email.com",
+    "telefone": "5232344345",
+    "agenciaId": 2,
+    "agencia": null,
+    "contratacoes": [null]
+  },
   "produto": {
-    "tipo": "EMPRESTIMO",
-    "valorSolicitado": 30000,
-    "taxaJuros": 3.5,
-    "prazoDias": 360
+    "id": 1,
+    "nome": "Empréstimo Pessoal",
+    "descricao": "Crédito Pessoal",
+    "contratacoes": [null]
   }
 }
 ```
@@ -267,6 +383,11 @@ A API estará disponível em:
 ---
 
 ### GET `/health` — Health Check
+
+**cURL:**
+```bash
+curl -X GET "http://localhost:5067/health"
+```
 
 **Response 200:**
 ```json
@@ -279,7 +400,6 @@ A API estará disponível em:
   }
 }
 ```
-
 ---
 
 ## 7. Como Executar os Testes
@@ -304,38 +424,24 @@ dotnet test --verbosity normal
 
 > Todos os testes usam `WebApplicationFactory<Program>` com Oracle substituído por banco InMemory e RabbitMQ mockado via Moq.
 
-**Print do resultado:**
-_(cole aqui o print do terminal com `dotnet test` após rodar)_
-
+**Terminal de Testes:**
+![Demo](./readme-image-gif/demo-01.gif)
 ---
 
 ## 8. Painel do RabbitMQ
 
 Acesse **http://localhost:15672** → aba **Queues** → fila `contratacao-solicitada`.
 
-**Print do painel com mensagens processadas:**
-_(cole aqui o print mostrando a fila com `Ready: 0` e `Total: N` após processar contratações)_
-
-Para demonstrar o comportamento de **Unacked** (requisito do enunciado):
-1. Adicione um `Thread.Sleep(30000)` temporário no `ContratacaoConsumer` antes do `BasicAck`
-2. Envie uma contratação via POST
-3. Tire o print do painel mostrando `Unacked: 1`
-4. Remova o `Thread.Sleep`
+**Painel com mensagens processadas:**
+![Demo](./readme-image-gif/demo-02.gif)
 
 ---
 
 ## 9. Swagger com Contratação Aprovada
 
-Acesse **http://localhost:5000/swagger**:
 
-1. Execute `POST /api/agencias` para criar uma agência
-2. Execute `POST /api/clientes/pf` para criar um cliente
-3. Crie um produto diretamente no banco (via migrations seed ou SQL)
-4. Execute `POST /api/contratacoes` com `clienteId` e `produtoId`
-5. Aguarde ~2s e execute `GET /api/contratacoes/{id}` — status deverá ser `APROVADA`
-
-**Print do Swagger com contratação aprovada:**
-_(cole aqui o print da tela do Swagger mostrando a resposta do GET com `"status": "APROVADA"`)_
+**Swagger com contratação aprovada:**
+![Demo](./readme-image-gif/demo-03.gif)
 
 ---
 
