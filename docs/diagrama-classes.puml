@@ -1,0 +1,78 @@
+@startuml diagrama-classes
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+abstract class Cliente {
+  +Id : int
+  +Nome : string
+  +Email : string
+  +Telefone : string
+  +AgenciaId : int
+  +Agencia : Agencia
+  +Contratacoes : List<Contratacao>
+}
+
+class PessoaFisica {
+  +CPF : string
+  +DataNascimento : DateTime
+}
+
+class PessoaJuridica {
+  +CNPJ : string
+  +RazaoSocial : string
+}
+
+class Agencia {
+  +Id : int
+  +Nome : string
+  +Numero : string
+  +Endereco : string
+  +Clientes : List<Cliente>
+}
+
+abstract class Produto {
+  +Id : int
+  +Nome : string
+  +Descricao : string
+  +Tipo : string
+  +Contratacoes : List<Contratacao>
+}
+
+class Emprestimo {
+  +ValorSolicitado : decimal
+  +TaxaJuros : decimal
+  +PrazoDias : int
+}
+
+class MaquinaDeCartao {
+  +TaxaMDR : decimal
+}
+
+class ReceberSalario {
+  +EmpresaConvenio : string
+}
+
+class Contratacao {
+  +Id : int
+  +ClienteId : int
+  +ProdutoId : int
+  +Status : string
+  +DataSolicitacao : DateTime
+  +DataProcessamento : DateTime?
+  +Observacao : string
+  +Cliente : Cliente
+  +Produto : Produto
+}
+
+Cliente <|-- PessoaFisica
+Cliente <|-- PessoaJuridica
+Produto <|-- Emprestimo
+Produto <|-- MaquinaDeCartao
+Produto <|-- ReceberSalario
+
+Agencia "1" o-- "N" Cliente : possui
+Cliente "1" o-- "N" Contratacao : solicita
+Produto "1" o-- "N" Contratacao : referenciado em
+
+@enduml
