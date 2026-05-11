@@ -43,7 +43,6 @@ public class ContratacoesControllerTests : IClassFixture<CustomWebApplicationFac
         {
             Nome = "Empréstimo Pessoal",
             Descricao = "Crédito pessoal",
-            Tipo = "EMPRESTIMO",
             ValorSolicitado = 10000,
             TaxaJuros = 3.5m,
             PrazoDias = 360

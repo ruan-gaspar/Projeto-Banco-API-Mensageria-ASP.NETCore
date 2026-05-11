@@ -67,6 +67,19 @@ builder.Services.AddScoped<EmprestimoService>();
 
 var app = builder.Build();
 
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            Erro = "Erro interno no servidor."
+        });
+    });
+});
 app.UseSwagger();
 app.UseSwaggerUI();
 

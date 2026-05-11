@@ -29,6 +29,11 @@ public class ContratacoesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Solicitar([FromBody] CriarContratacaoDto dto)
     {
+        _logger.LogInformation(
+        "Solicitando contratação ClienteId={ClienteId} ProdutoId={ProdutoId}",
+        dto.ClienteId,
+        dto.ProdutoId);
+
         var cliente = await _db.Clientes.FindAsync(dto.ClienteId);
         if (cliente is null)
             return NotFound(new { Erro = "Cliente não encontrado." });
@@ -41,14 +46,14 @@ public class ContratacoesController : ControllerBase
         {
             ClienteId = dto.ClienteId,
             ProdutoId = dto.ProdutoId,
-            Status = "PENDENTE",
+            Status = StatusContratacao.Pendente,
             DataSolicitacao = DateTime.UtcNow
         };
 
         _db.Contratacoes.Add(contratacao);
         await _db.SaveChangesAsync();
 
-        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id, produto.Tipo));
+        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id, ObterTipoProduto(produto)));
         _rabbit.Publicar("contratacao-solicitada", payload);
 
         _logger.LogInformation("Contratação {Id} publicada na fila", contratacao.Id);
@@ -64,5 +69,16 @@ public class ContratacoesController : ControllerBase
             .FirstOrDefaultAsync(c => c.Id == id);
 
         return contratacao is null ? NotFound() : Ok(contratacao);
+    }
+
+    private static string ObterTipoProduto(Produto produto)
+    {
+        return produto switch
+        {
+            Emprestimo => "EMPRESTIMO",
+            MaquinaDeCartao => "MAQUINA",
+            ReceberSalario => "SALARIO",
+            _ => "DESCONHECIDO"
+        };
     }
 }

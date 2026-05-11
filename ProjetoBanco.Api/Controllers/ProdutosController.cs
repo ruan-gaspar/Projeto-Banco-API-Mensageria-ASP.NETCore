@@ -19,7 +19,6 @@ public class ProdutosController : ControllerBase
         {
             Nome = dto.Nome,
             Descricao = dto.Descricao,
-            Tipo = "EMPRESTIMO",
             ValorSolicitado = dto.ValorSolicitado,
             TaxaJuros = dto.TaxaJuros,
             PrazoDias = dto.PrazoDias

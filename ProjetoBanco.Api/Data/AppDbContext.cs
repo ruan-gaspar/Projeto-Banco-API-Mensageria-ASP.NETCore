@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
     public DbSet<Produto> Produtos => Set<Produto>();
     public DbSet<Emprestimo> Emprestimos => Set<Emprestimo>();
     public DbSet<Contratacao> Contratacoes => Set<Contratacao>();
+    public DbSet<MaquinaDeCartao> MaquinasDeCartao => Set<MaquinaDeCartao>();
+    public DbSet<ReceberSalario> ReceberSalario => Set<ReceberSalario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,7 +44,7 @@ public class AppDbContext : DbContext
             .HasOne(c => c.Produto)
             .WithMany(p => p.Contratacoes)
             .HasForeignKey(c => c.ProdutoId);
-        
+
         modelBuilder.Entity<Contratacao>()
             .Property(c => c.Observacao)
             .IsRequired(false)

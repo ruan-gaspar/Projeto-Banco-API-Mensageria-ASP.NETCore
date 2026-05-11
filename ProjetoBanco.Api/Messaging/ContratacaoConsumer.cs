@@ -1,3 +1,4 @@
+using ProjetoBanco.Api.Domain;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -59,7 +60,7 @@ public class ContratacaoConsumer : BackgroundService
             _logger.LogWarning("Consumer não iniciado pois RabbitMQ estava indisponível.");
             return Task.CompletedTask;
         }
-        
+
         var consumer = new AsyncEventingBasicConsumer(_channel!);
 
         consumer.Received += async (_, ea) =>
@@ -91,16 +92,19 @@ public class ContratacaoConsumer : BackgroundService
                 // Regra de negócio (para dupla: lógica extra de score/taxa)
                 var (aprovado, obs) = emprestimoService.ProcessarEmprestimo(contratacao);
 
-                contratacao.Status = aprovado ? "APROVADA" : "RECUSADA";
+                contratacao.Status = aprovado
+                    ? StatusContratacao.Aprovada
+                    : StatusContratacao.Recusada;
+
                 contratacao.Observacao = obs;
                 contratacao.DataProcessamento = DateTime.UtcNow;
 
                 await db.SaveChangesAsync(stoppingToken);
                 _logger.LogInformation("Contratação {Id} processada: {Status}", contratacao.Id, contratacao.Status);
-                
+
                 //apenas para teste com RabbitMQ 
                 //await Task.Delay(30000, stoppingToken);
-                
+
                 _channel!.BasicAck(ea.DeliveryTag, false); // ACK manual após sucesso
             }
             catch (Exception ex)
