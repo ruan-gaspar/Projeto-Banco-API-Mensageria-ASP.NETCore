@@ -48,7 +48,7 @@ public class ContratacoesController : ControllerBase
         _db.Contratacoes.Add(contratacao);
         await _db.SaveChangesAsync();
 
-        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id, produto.Tipo));
+        var payload = JsonSerializer.Serialize(new ContratacaoPayload(contratacao.Id,ObterTipoProduto(produto)));
         _rabbit.Publicar("contratacao-solicitada", payload);
 
         _logger.LogInformation("Contratação {Id} publicada na fila", contratacao.Id);
@@ -64,5 +64,16 @@ public class ContratacoesController : ControllerBase
             .FirstOrDefaultAsync(c => c.Id == id);
 
         return contratacao is null ? NotFound() : Ok(contratacao);
+    }
+
+    private static string ObterTipoProduto(Produto produto)
+    {
+        return produto switch
+        {
+            Emprestimo => "EMPRESTIMO",
+            MaquinaDeCartao => "MAQUINA",
+            ReceberSalario => "SALARIO",
+            _ => "DESCONHECIDO"
+        };
     }
 }
