@@ -78,7 +78,7 @@ Aguarde ~10 segundos e acesse o painel de gerenciamento:
 
 ### 2. Configurar a connection string Oracle
 
-Edite `ProjetoBanco.Api/appsettings.json`:
+Crie um arquivo `.env` e copie o conteúdo de `.env.example`. Altere seu user e senha do banco Oracle:
 
 ```
 ORACLE_USER=RM_SEUNUMERO
