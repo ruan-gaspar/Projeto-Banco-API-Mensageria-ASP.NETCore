@@ -1,3 +1,4 @@
+using ProjetoBanco.Api.Domain;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -91,7 +92,10 @@ public class ContratacaoConsumer : BackgroundService
                 // Regra de negócio (para dupla: lógica extra de score/taxa)
                 var (aprovado, obs) = emprestimoService.ProcessarEmprestimo(contratacao);
 
-                contratacao.Status = aprovado ? "APROVADA" : "RECUSADA";
+                contratacao.Status = aprovado
+                    ? StatusContratacao.Aprovada
+                    : StatusContratacao.Recusada;
+
                 contratacao.Observacao = obs;
                 contratacao.DataProcessamento = DateTime.UtcNow;
 

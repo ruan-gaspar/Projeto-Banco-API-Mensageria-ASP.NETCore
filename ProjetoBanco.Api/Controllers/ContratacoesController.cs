@@ -46,7 +46,7 @@ public class ContratacoesController : ControllerBase
         {
             ClienteId = dto.ClienteId,
             ProdutoId = dto.ProdutoId,
-            Status = "PENDENTE",
+            Status = StatusContratacao.Pendente,
             DataSolicitacao = DateTime.UtcNow
         };
 
