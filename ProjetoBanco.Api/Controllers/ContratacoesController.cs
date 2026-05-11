@@ -29,6 +29,11 @@ public class ContratacoesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Solicitar([FromBody] CriarContratacaoDto dto)
     {
+        _logger.LogInformation(
+        "Solicitando contratação ClienteId={ClienteId} ProdutoId={ProdutoId}",
+        dto.ClienteId,
+        dto.ProdutoId);
+
         var cliente = await _db.Clientes.FindAsync(dto.ClienteId);
         if (cliente is null)
             return NotFound(new { Erro = "Cliente não encontrado." });
